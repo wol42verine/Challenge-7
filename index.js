@@ -1,6 +1,19 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+// List of available licenses
+const licenses = [
+    {
+        name: 'MIT License',
+        badge: '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)',
+    },
+    {
+        name: 'Apache License 2.0',
+        badge: '[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)',
+    },
+    // Add more licenses as needed
+];
+
 // Defining the questions for user input
 const questions = [
     {
@@ -30,6 +43,11 @@ const questions = [
     },
     {
         type: 'input',
+        name: 'githubUsername',
+        message: 'What is your GitHub username?',
+    },
+    {
+        type: 'input',
         name: 'email',
         message: 'What is your email address for contributions?',
     },
@@ -39,9 +57,10 @@ const questions = [
         message: 'How do you test your project?',
     },
     {
-        type: 'input',
+        type: 'list',
         name: 'license',
-        message: 'What license does your project have?',
+        message: 'Choose a license for your project:',
+        choices: licenses.map(license => license.name),
     },
     {
         type: 'confirm',
@@ -58,6 +77,7 @@ const questions = [
 
 // Prompt the user with the questions
 inquirer.prompt(questions).then((answers) => {
+    const selectedLicense = licenses.find(license => license.name === answers.license);
     const toc = answers.toc ? `
 ## Table of Contents
 1. [Description](#description)
@@ -83,35 +103,41 @@ inquirer.prompt(questions).then((answers) => {
         }
     }).join('\n\n');
 
+    // Format GitHub username as a hyperlink
+    const githubLink = answers.githubUsername ? `[@${answers.githubUsername}](https://github.com/${answers.githubUsername})` : '';
+
     const contributingSection = `${answers.contributing}
-${answers.email ? `\nFor contributions, please contact me at [${answers.email}](mailto:${answers.email})` : ''}`;
+${githubLink ? `\nFor contributions, please visit ${githubLink}.` : ''}
+${answers.email ? `\nYou can also contact me at [${answers.email}](mailto:${answers.email})` : ''}`;
 
-    const readmeContent = `
-# ${answers.title}
+    // Generate README content
+    const readmeContent = `${selectedLicense.badge || ''}
+    # ${answers.title}
+    
+    ${toc}
+    
+    ## Description
+    ${answers.description}
+    
+    ## Installation
+    ${answers.installation}
+    
+    ## Usage
+    ${answers.usage}
+    
+    ## Contributing
+    ${contributingSection}
+    
+    ## Tests
+    ${answers.tests}
+    
+    ## License
+    ${answers.license}
+    
+    ## FAQ
+    ${faqEntries}
+    `;
 
-${toc}
-
-## Description
-${answers.description}
-
-## Installation
-${answers.installation}
-
-## Usage
-${answers.usage}
-
-## Contributing
-${contributingSection}
-
-## Tests
-${answers.tests}
-
-## License
-${answers.license}
-
-## FAQ
-${faqEntries}
-`;
 
     // Write the README content to a README.md file
     fs.writeFile('README.md', readmeContent, (err) => {
@@ -122,3 +148,4 @@ ${faqEntries}
         console.log('README.md has been generated!');
     });
 });
+//Todo: TOC links, Github link, Badge Icon
