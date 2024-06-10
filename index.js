@@ -1,13 +1,7 @@
-// TODO: Include packages needed for this application
-
-// This is the npm install inquirer Code
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-
-
-// TODO: Create an array of questions for user input
-//Defining the Questions
+// Defining the questions for user input
 const questions = [
     {
         type: 'input',
@@ -36,6 +30,11 @@ const questions = [
     },
     {
         type: 'input',
+        name: 'email',
+        message: 'What is your email address for contributions?',
+    },
+    {
+        type: 'input',
         name: 'tests',
         message: 'How do you test your project?',
     },
@@ -44,14 +43,53 @@ const questions = [
         name: 'license',
         message: 'What license does your project have?',
     },
+    {
+        type: 'confirm',
+        name: 'toc',
+        message: 'Would you like to include a Table of Contents?',
+        default: false,
+    },
+    {
+        type: 'input',
+        name: 'faq',
+        message: 'Add FAQ (use ":" to separate question and answer, and ";" to separate multiple FAQs):',
+    },
 ];
 
-//Prompt the User
+// Prompt the user with the questions
 inquirer.prompt(questions).then((answers) => {
+    const toc = answers.toc ? `
+## Table of Contents
+1. [Description](#description)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [Tests](#tests)
+6. [License](#license)
+7. [FAQ](#faq)
+` : '';
 
-    //Generating the README content
+    // Process FAQ input
+    const faqEntries = answers.faq.split(';').map((qa, index) => {
+        const [question, answer] = qa.split(':');
+        if (question && answer) {
+            return `**Q${index + 1}: ${question.trim()}**
+
+**A${index + 1}: ${answer.trim()}**`;
+        } else {
+            return `**Q${index + 1}: Invalid entry**
+
+**A${index + 1}: Please provide both question and answer in the format 'question:answer'**`;
+        }
+    }).join('\n\n');
+
+    const contributingSection = `${answers.contributing}
+${answers.email ? `\nFor contributions, please contact me at [${answers.email}](mailto:${answers.email})` : ''}`;
+
     const readmeContent = `
 # ${answers.title}
+
+${toc}
 
 ## Description
 ${answers.description}
@@ -63,50 +101,24 @@ ${answers.installation}
 ${answers.usage}
 
 ## Contributing
-${answers.contributing}
+${contributingSection}
 
 ## Tests
 ${answers.tests}
 
 ## License
 ${answers.license}
+
+## FAQ
+${faqEntries}
 `;
 
-    //This should write the file, or throw an error if something goes wrong
+    // Write the README content to a README.md file
     fs.writeFile('README.md', readmeContent, (err) => {
         if (err) {
-            console.error('Error Writing README file:', err);
+            console.error('Error writing README file:', err);
             return;
         }
         console.log('README.md has been generated!');
     });
 });
-
-
-
-
-
-// TODO: Create a function to write README file
-// This was the original code
-
-//inquirer
-//.prompt([
-/* Pass your questions in here */
-//])
-//.then((answers) => {
-// Use user feedback for... whatever!!
-//})
-//.catch((error) => {
-//if (error.isTtyError) {
-// Prompt couldn't be rendered in the current environment
-//} else {
-// Something else went wrong
-//}
-//});
-// function writeToFile(fileName, data) {}
-
-// TODO: Create a function to initialize app
-//function init() {}
-
-// Function call to initialize app
-//init();
