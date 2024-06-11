@@ -78,6 +78,7 @@ const questions = [
 // Prompt the user with the questions
 inquirer.prompt(questions).then((answers) => {
     const selectedLicense = licenses.find(license => license.name === answers.license);
+
     const toc = answers.toc ? `
 ## Table of Contents
 1. [Description](#description)
@@ -112,32 +113,32 @@ ${answers.email ? `\nYou can also contact me at [${answers.email}](mailto:${answ
 
     // Generate README content
     const readmeContent = `${selectedLicense.badge || ''}
-    # ${answers.title}
-    
-    ${toc}
-    
-    ## Description
-    ${answers.description}
-    
-    ## Installation
-    ${answers.installation}
-    
-    ## Usage
-    ${answers.usage}
-    
-    ## Contributing
-    ${contributingSection}
-    
-    ## Tests
-    ${answers.tests}
-    
-    ## License
-    ${answers.license}
-    
-    ## FAQ
-    ${faqEntries}
-    `;
 
+# ${answers.title}
+
+${toc}
+
+## Description
+${answers.description}
+
+## Installation
+${answers.installation}
+
+## Usage
+${answers.usage}
+
+## Contributing
+${contributingSection}
+
+## Tests
+${answers.tests}
+
+## License
+This project is licensed under the ${answers.license}.
+
+## FAQ
+${faqEntries}
+`;
 
     // Write the README content to a README.md file
     fs.writeFile('README.md', readmeContent, (err) => {
@@ -148,4 +149,3 @@ ${answers.email ? `\nYou can also contact me at [${answers.email}](mailto:${answ
         console.log('README.md has been generated!');
     });
 });
-//Todo: TOC links, Github link, Badge Icon
