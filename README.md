@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Test #3
+# Test #5
 
 
 ## Table of Contents
@@ -23,11 +23,11 @@ testing
 testing
 
 ## Contributing
-tbd
+testing
 
 For contributions, please visit [@wol42verine](https://github.com/wol42verine).
 
-You can also contact me at [wol42verine@gmail.com](mailto:wol42verine@gmail.com)
+You can also contact me at [test@hotmail.com](mailto:test@hotmail.com)
 
 ## Tests
 testing
@@ -43,6 +43,3 @@ This project is licensed under the MIT License.
 **Q2: Invalid entry**
 
 **A2: Please provide both question and answer in the format 'question:answer'**
-
-[![Walkthrough video](<iframe src="https://drive.google.com/file/d/11Y_RZGs4gaG2QPYgWz1rzx-pquKeRVt3/preview" width="640" height="480"></iframe>)
-]
