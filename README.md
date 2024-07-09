@@ -43,3 +43,9 @@ This project is licensed under the MIT License.
 **Q2: Invalid entry**
 
 **A2: Please provide both question and answer in the format 'question:answer'**
+
+## Video Demo
+
+<video width="640" height="480" controls>
+  <source src="Assets/Challenge 9.mp4" type="video/mp4">
+</video>
